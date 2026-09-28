@@ -1,0 +1,2339 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Open South Sudan — Technology for a safer, stronger South Sudan</title>
+<meta name="description" content="Open South Sudan (OSS) is a Juba-based non-profit using technology, data and community-driven innovation to build early warning systems, digital skills and civic solutions for South Sudan." />
+<meta name="theme-color" content="#2231B0" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Open South Sudan — Technology for a safer, stronger South Sudan" />
+<meta property="og:description" content="A non-profit building community-driven digital tools for South Sudan — from disaster early warning to skills and data platforms." />
+<meta property="og:url" content="https://open-ss.org" />
+
+<!-- Favicon (inline SVG) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%232231B0'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='46' font-weight='bold' fill='white' text-anchor='middle'%3EOSS%3C/text%3E%3C/svg%3E" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind (Play CDN — swap for a compiled build in production) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50:  '#eef1ff',
+            100: '#e0e5ff',
+            200: '#c6ceff',
+            300: '#a3aeff',
+            400: '#7d88fb',
+            500: '#5a63f0',
+            600: '#2231B0',  /* Persian Blue — primary */
+            700: '#1c2895',
+            800: '#182178',
+            900: '#141b5e',
+            950: '#0b0f38',
+          },
+          ink: '#111111',      /* Cod Gray */
+          gold: '#F2B705',
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          display: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        },
+        boxShadow: {
+          soft: '0 10px 40px -12px rgba(17,17,17,.12)',
+          glow: '0 20px 60px -20px rgba(34,49,176,.55)',
+        },
+        borderRadius: { '4xl': '2rem' },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-feature-settings: "ss01","cv01"; }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1);
+    will-change: opacity, transform;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- Mesh / glow background ---------- */
+  .mesh {
+    background:
+      radial-gradient(60% 60% at 12% 8%, rgba(90,99,240,.55) 0%, transparent 60%),
+      radial-gradient(50% 50% at 88% 12%, rgba(242,183,5,.28) 0%, transparent 60%),
+      radial-gradient(60% 70% at 70% 100%, rgba(34,49,176,.65) 0%, transparent 65%),
+      #0b0f38;
+  }
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
+  }
+
+  /* ---------- Marquee ---------- */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 34s linear infinite;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* ---------- Pulse dot ---------- */
+  .pulse-dot::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 9999px;
+    background: currentColor;
+    animation: pulse-ring 2s cubic-bezier(.4,0,.6,1) infinite;
+  }
+  @keyframes pulse-ring {
+    0%   { transform: scale(1);   opacity: .7; }
+    70%  { transform: scale(2.4); opacity: 0; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+
+  /* ---------- Details marker cleanup (mobile accordion) ---------- */
+  summary::-webkit-details-marker { display: none; }
+  summary { list-style: none; }
+  details[open] .chev { transform: rotate(180deg); }
+  .chev { transition: transform .25s ease; }
+
+  /* ---------- Focus ring ---------- */
+  a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible {
+    outline: 2px solid #F2B705;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .marquee-track { animation: none; }
+    .pulse-dot::before { animation: none; }
+  }
+</style>
+</head>
+
+<body class="bg-white text-ink font-sans antialiased selection:bg-brand-600 selection:text-white">
+
+<!-- Skip link -->
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-brand-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg">
+  Skip to content
+</a>
+
+<!-- ============================================================
+     TOP BAR
+============================================================ -->
+<div class="hidden md:block bg-ink text-white/80 text-[13px]">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8 flex h-10 items-center justify-between">
+    <div class="flex items-center gap-6">
+      <a href="tel:+211922702881" class="flex items-center gap-2 hover:text-white transition">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+        092 270 2881
+      </a>
+      <a href="mailto:hello@open-ss.org" class="flex items-center gap-2 hover:text-white transition">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+        hello@open-ss.org
+      </a>
+      <span class="hidden lg:flex items-center gap-2">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Juba, Central Equatoria, South Sudan
+      </span>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <span class="hidden lg:inline text-white/50">Follow us</span>
+      <!-- LinkedIn -->
+      <a href="#" aria-label="LinkedIn" class="hover:text-white transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21h-4V9Z"/></svg>
+      </a>
+      <!-- GitHub -->
+      <a href="#" aria-label="GitHub" class="hover:text-white transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+      </a>
+      <!-- Facebook -->
+      <a href="#" aria-label="Facebook" class="hover:text-white transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99A10 10 0 0 0 22 12Z"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     HEADER / NAVBAR
+============================================================ -->
+<header id="site-header" class="sticky top-0 z-50 bg-white/85 backdrop-blur-xl border-b border-ink/5 transition-shadow duration-300">
+  <nav class="mx-auto max-w-7xl px-6 lg:px-8" aria-label="Main">
+    <div class="flex h-[72px] items-center justify-between gap-4">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-3 shrink-0 group">
+        <span class="relative grid place-items-center w-11 h-11 rounded-2xl bg-brand-600 text-white shadow-glow group-hover:scale-105 transition-transform duration-300">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3.6 9h16.8M3.6 15h16.8"/>
+            <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18Z"/>
+          </svg>
+          <span class="absolute -right-0.5 -bottom-0.5 w-3 h-3 rounded-full bg-gold ring-2 ring-white"></span>
+        </span>
+        <span class="leading-tight">
+          <span class="block font-display font-extrabold text-[17px] tracking-tight text-ink">Open South Sudan</span>
+          <span class="block text-[11px] font-semibold uppercase tracking-[.16em] text-brand-600">Tech for good</span>
+        </span>
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="hidden lg:flex items-center gap-1 text-[14.5px] font-semibold text-ink/75">
+
+        <!-- About -->
+        <li class="relative group">
+          <button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl hover:text-brand-600 hover:bg-brand-50 transition" aria-haspopup="true" aria-expanded="false">
+            About
+            <svg class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 absolute left-0 top-full pt-2 w-[260px]">
+            <div class="rounded-2xl bg-white shadow-soft border border-ink/5 p-2">
+              <a href="#about" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 transition"><span class="block font-semibold">Who We Are</span><span class="block text-[12.5px] font-medium text-ink/50">Our story &amp; mandate</span></a>
+              <a href="#about" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 transition"><span class="block font-semibold">Mission, Vision &amp; Values</span><span class="block text-[12.5px] font-medium text-ink/50">What drives us</span></a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 transition"><span class="block font-semibold">Our Team</span><span class="block text-[12.5px] font-medium text-ink/50">The people behind OSS</span></a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 transition"><span class="block font-semibold">Partners &amp; Funders</span><span class="block text-[12.5px] font-medium text-ink/50">Who we work with</span></a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 transition"><span class="block font-semibold">Careers</span><span class="block text-[12.5px] font-medium text-ink/50">Join the team</span></a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Programs -->
+        <li class="relative group">
+          <button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl hover:text-brand-600 hover:bg-brand-50 transition" aria-haspopup="true" aria-expanded="false">
+            What We Do
+            <svg class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[560px]">
+            <div class="rounded-2xl bg-white shadow-soft border border-ink/5 p-2 grid grid-cols-2 gap-1">
+              <a href="#programs" class="flex gap-3 px-3.5 py-3 rounded-xl hover:bg-brand-50 transition">
+                <span class="grid place-items-center w-9 h-9 rounded-xl bg-brand-100 text-brand-700 shrink-0">
+                  <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.6a2 2 0 0 1 3.4 0l7 11.4A2 2 0 0 1 19 18H5a2 2 0 0 1-1.7-3L10.3 3.6Z"/><path d="M12 9v4M12 16h.01"/></svg>
+                </span>
+                <span><span class="block font-semibold text-ink">AlertGuard</span><span class="block text-[12.5px] font-medium text-ink/50">Early warning &amp; response</span></span>
+              </a>
+              <a href="#programs" class="flex gap-3 px-3.5 py-3 rounded-xl hover:bg-brand-50 transition">
+                <span class="grid place-items-center w-9 h-9 rounded-xl bg-gold/15 text-[#a67c00] shrink-0">
+                  <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </span>
+                <span><span class="block font-semibold text-ink">Betna</span><span class="block text-[12.5px] font-medium text-ink/50">Skills &amp; crowdsourcing</span></span>
+              </a>
+              <a href="#programs" class="flex gap-3 px-3.5 py-3 rounded-xl hover:bg-brand-50 transition">
+                <span class="grid place-items-center w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 shrink-0">
+                  <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                </span>
+                <span><span class="block font-semibold text-ink">Eventy</span><span class="block text-[12.5px] font-medium text-ink/50">Community events</span></span>
+              </a>
+              <a href="#programs" class="flex gap-3 px-3.5 py-3 rounded-xl hover:bg-brand-50 transition">
+                <span class="grid place-items-center w-9 h-9 rounded-xl bg-sky-100 text-sky-700 shrink-0">
+                  <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+                </span>
+                <span><span class="block font-semibold text-ink">Peacebuilding &amp; Civic Tech</span><span class="block text-[12.5px] font-medium text-ink/50">Stability through tech</span></span>
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Impact -->
+        <li class="relative group">
+          <button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl hover:text-brand-600 hover:bg-brand-50 transition" aria-haspopup="true" aria-expanded="false">
+            Impact
+            <svg class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 absolute left-0 top-full pt-2 w-[250px]">
+            <div class="rounded-2xl bg-white shadow-soft border border-ink/5 p-2">
+              <a href="#impact" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Our Impact</a>
+              <a href="#stories" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Stories from the Field</a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Reports &amp; Publications</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Get Involved -->
+        <li class="relative group">
+          <button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl hover:text-brand-600 hover:bg-brand-50 transition" aria-haspopup="true" aria-expanded="false">
+            Get Involved
+            <svg class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 absolute left-0 top-full pt-2 w-[250px]">
+            <div class="rounded-2xl bg-white shadow-soft border border-ink/5 p-2">
+              <a href="#get-involved" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Donate</a>
+              <a href="#get-involved" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Volunteer</a>
+              <a href="#get-involved" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Partner With Us</a>
+              <a href="#alerts" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Report a Hazard</a>
+            </div>
+          </div>
+        </li>
+
+        <!-- Resources -->
+        <li class="relative group">
+          <button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl hover:text-brand-600 hover:bg-brand-50 transition" aria-haspopup="true" aria-expanded="false">
+            Resources
+            <svg class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-200 absolute right-0 top-full pt-2 w-[250px]">
+            <div class="rounded-2xl bg-white shadow-soft border border-ink/5 p-2">
+              <a href="#news" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">News &amp; Blog</a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Media Centre</a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">FAQs</a>
+              <a href="#" class="block px-3.5 py-2.5 rounded-xl hover:bg-brand-50 hover:text-brand-700 font-semibold transition">Open Source (GitHub)</a>
+            </div>
+          </div>
+        </li>
+
+        <li><a href="#contact" class="block px-3.5 py-2.5 rounded-xl hover:text-brand-600 hover:bg-brand-50 transition">Contact</a></li>
+      </ul>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-2">
+        <a href="#alerts" class="hidden xl:inline-flex items-center gap-2 text-[14px] font-bold text-brand-700 px-3.5 py-2.5 rounded-xl hover:bg-brand-50 transition">
+          <span class="relative flex w-2 h-2 text-emerald-500 pulse-dot"><span class="relative w-2 h-2 rounded-full bg-emerald-500"></span></span>
+          Get Alerts
+        </a>
+        <a href="#get-involved" class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-[14px] font-bold text-white shadow-glow hover:bg-brand-700 hover:-translate-y-0.5 transition-all duration-300">
+          Donate
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+
+        <!-- Mobile toggle -->
+        <button id="menu-btn" class="lg:hidden grid place-items-center w-11 h-11 rounded-xl border border-ink/10 hover:bg-ink/5 transition" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          <svg id="icon-open" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg id="icon-close" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= MOBILE MENU ================= -->
+  <div id="mobile-menu" class="lg:hidden hidden border-t border-ink/5 bg-white max-h-[calc(100vh-72px)] overflow-y-auto">
+    <div class="px-6 py-4 space-y-1 text-[15px] font-semibold">
+
+      <details class="group border-b border-ink/5 pb-1">
+        <summary class="flex items-center justify-between py-3.5 cursor-pointer">
+          About
+          <svg class="chev w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="pb-3 pl-1 space-y-0.5 text-ink/70 font-medium">
+          <a href="#about" class="block py-2.5 hover:text-brand-600">Who We Are</a>
+          <a href="#about" class="block py-2.5 hover:text-brand-600">Mission, Vision &amp; Values</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">Our Team</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">Partners &amp; Funders</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">Careers</a>
+        </div>
+      </details>
+
+      <details class="group border-b border-ink/5 pb-1">
+        <summary class="flex items-center justify-between py-3.5 cursor-pointer">
+          What We Do
+          <svg class="chev w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="pb-3 pl-1 space-y-0.5 text-ink/70 font-medium">
+          <a href="#programs" class="block py-2.5 hover:text-brand-600">AlertGuard — Early Warning</a>
+          <a href="#programs" class="block py-2.5 hover:text-brand-600">Betna — Skills &amp; Crowdsourcing</a>
+          <a href="#programs" class="block py-2.5 hover:text-brand-600">Eventy</a>
+          <a href="#programs" class="block py-2.5 hover:text-brand-600">Peacebuilding &amp; Civic Tech</a>
+          <a href="#programs" class="block py-2.5 hover:text-brand-600">Digital Inclusion &amp; Data</a>
+        </div>
+      </details>
+
+      <details class="group border-b border-ink/5 pb-1">
+        <summary class="flex items-center justify-between py-3.5 cursor-pointer">
+          Impact
+          <svg class="chev w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="pb-3 pl-1 space-y-0.5 text-ink/70 font-medium">
+          <a href="#impact" class="block py-2.5 hover:text-brand-600">Our Impact</a>
+          <a href="#stories" class="block py-2.5 hover:text-brand-600">Stories from the Field</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">Reports &amp; Publications</a>
+        </div>
+      </details>
+
+      <details class="group border-b border-ink/5 pb-1">
+        <summary class="flex items-center justify-between py-3.5 cursor-pointer">
+          Get Involved
+          <svg class="chev w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="pb-3 pl-1 space-y-0.5 text-ink/70 font-medium">
+          <a href="#get-involved" class="block py-2.5 hover:text-brand-600">Donate</a>
+          <a href="#get-involved" class="block py-2.5 hover:text-brand-600">Volunteer</a>
+          <a href="#get-involved" class="block py-2.5 hover:text-brand-600">Partner With Us</a>
+          <a href="#alerts" class="block py-2.5 hover:text-brand-600">Report a Hazard</a>
+        </div>
+      </details>
+
+      <details class="group border-b border-ink/5 pb-1">
+        <summary class="flex items-center justify-between py-3.5 cursor-pointer">
+          Resources
+          <svg class="chev w-4 h-4 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="pb-3 pl-1 space-y-0.5 text-ink/70 font-medium">
+          <a href="#news" class="block py-2.5 hover:text-brand-600">News &amp; Blog</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">Media Centre</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">FAQs</a>
+          <a href="#" class="block py-2.5 hover:text-brand-600">Open Source (GitHub)</a>
+        </div>
+      </details>
+
+      <a href="#contact" class="block py-3.5 border-b border-ink/5">Contact</a>
+
+      <div class="pt-5 pb-2 flex flex-col gap-3">
+        <a href="#get-involved" class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3.5 text-white font-bold shadow-glow">
+          Donate
+        </a>
+        <a href="#alerts" class="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-brand-600 px-5 py-3.5 text-brand-700 font-bold">
+          <span class="relative flex w-2 h-2 text-emerald-500 pulse-dot"><span class="relative w-2 h-2 rounded-full bg-emerald-500"></span></span>
+          Get Alerts
+        </a>
+        <a href="tel:+211922702881" class="inline-flex items-center justify-center gap-2 rounded-xl bg-ink/5 px-5 py-3.5 font-bold text-ink">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          092 270 2881
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="relative overflow-hidden mesh text-white">
+    <div class="absolute inset-0 grid-lines" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 lg:py-28">
+      <div class="grid lg:grid-cols-12 gap-14 items-center">
+
+        <!-- Copy -->
+        <div class="lg:col-span-7">
+          <div class="reveal inline-flex items-center gap-2.5 rounded-full bg-white/10 ring-1 ring-white/20 backdrop-blur px-4 py-2 text-[12.5px] font-bold tracking-wide">
+            <span class="relative flex w-2 h-2 text-gold pulse-dot"><span class="relative w-2 h-2 rounded-full bg-gold"></span></span>
+            A non-profit built in Juba, for South Sudan
+          </div>
+
+          <h1 class="reveal mt-7 font-display font-extrabold tracking-tight text-[40px] leading-[1.05] sm:text-[56px] lg:text-[66px]">
+            Technology for a
+            <span class="relative inline-block">
+              <span class="relative z-10 bg-gradient-to-r from-gold via-amber-200 to-gold bg-clip-text text-transparent">safer, stronger</span>
+            </span>
+            South Sudan.
+          </h1>
+
+          <p class="reveal mt-7 max-w-xl text-[17px] leading-relaxed text-white/70">
+            We build community-driven digital tools — from disaster early warning to skills and
+            open-data platforms — so that every South Sudanese community can prepare, respond and thrive.
+          </p>
+
+          <div class="reveal mt-9 flex flex-wrap items-center gap-3">
+            <a href="#programs" class="inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-4 text-[15px] font-bold text-brand-700 shadow-glow hover:-translate-y-0.5 transition-all duration-300">
+              Explore our programs
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#get-involved" class="inline-flex items-center gap-2 rounded-2xl bg-white/10 ring-1 ring-white/25 backdrop-blur px-6 py-4 text-[15px] font-bold text-white hover:bg-white/20 transition-all duration-300">
+              Partner with us
+            </a>
+          </div>
+
+          <!-- Quick trust row -->
+          <div class="reveal mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 text-[13px] font-semibold text-white/55">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Registered non-profit
+            </span>
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Open-source by default
+            </span>
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Community-led design
+            </span>
+          </div>
+        </div>
+
+        <!-- Visual: AlertGuard mock card -->
+        <div class="lg:col-span-5 reveal">
+          <div class="relative">
+            <div class="absolute -inset-6 bg-gradient-to-tr from-gold/25 via-brand-500/20 to-transparent blur-3xl" aria-hidden="true"></div>
+
+            <div class="relative rounded-4xl bg-white/10 ring-1 ring-white/20 backdrop-blur-xl p-3 shadow-glow">
+              <div class="rounded-[1.35rem] bg-white overflow-hidden">
+                <!-- card header -->
+                <div class="flex items-center justify-between px-5 py-4 border-b border-ink/5">
+                  <div class="flex items-center gap-2.5">
+                    <span class="grid place-items-center w-8 h-8 rounded-xl bg-brand-600 text-white">
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.6a2 2 0 0 1 3.4 0l7 11.4A2 2 0 0 1 19 18H5a2 2 0 0 1-1.7-3L10.3 3.6Z"/><path d="M12 9v4M12 16h.01"/></svg>
+                    </span>
+                    <div>
+                      <p class="text-[13px] font-extrabold text-ink leading-none">AlertGuard</p>
+                      <p class="text-[11px] font-semibold text-ink/45 mt-0.5">Live hazard monitor</p>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[10.5px] font-extrabold uppercase tracking-wide text-emerald-700">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
+                  </span>
+                </div>
+
+                <!-- alert rows -->
+                <div class="p-4 space-y-3">
+                  <div class="flex items-start gap-3 rounded-2xl bg-red-50 ring-1 ring-red-100 p-3.5">
+                    <span class="grid place-items-center w-8 h-8 rounded-lg bg-red-500 text-white shrink-0">
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.6a2 2 0 0 1 3.4 0l7 11.4A2 2 0 0 1 19 18H5a2 2 0 0 1-1.7-3L10.3 3.6Z"/></svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-[13px] font-bold text-ink">Flood risk — high</p>
+                      <p class="text-[12px] text-ink/55 leading-snug">Nile corridor, Bor County · 48h outlook</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start gap-3 rounded-2xl bg-amber-50 ring-1 ring-amber-100 p-3.5">
+                    <span class="grid place-items-center w-8 h-8 rounded-lg bg-amber-500 text-white shrink-0">
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg>
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-[13px] font-bold text-ink">Heat advisory</p>
+                      <p class="text-[12px] text-ink/55 leading-snug">Juba · 39°C peak expected</p>
+                    </div>
+                  </div>
+
+                  <!-- mini chart -->
+                  <div class="rounded-2xl bg-ink/[.03] ring-1 ring-ink/5 p-4">
+                    <div class="flex items-center justify-between mb-3">
+                      <p class="text-[11px] font-extrabold uppercase tracking-wider text-ink/45">Community reports</p>
+                      <p class="text-[11px] font-bold text-brand-600">This week</p>
+                    </div>
+                    <div class="flex items-end gap-1.5 h-16">
+                      <div class="flex-1 rounded-t-md bg-brand-200" style="height:35%"></div>
+                      <div class="flex-1 rounded-t-md bg-brand-300" style="height:55%"></div>
+                      <div class="flex-1 rounded-t-md bg-brand-400" style="height:42%"></div>
+                      <div class="flex-1 rounded-t-md bg-brand-500" style="height:78%"></div>
+                      <div class="flex-1 rounded-t-md bg-brand-600" style="height:100%"></div>
+                      <div class="flex-1 rounded-t-md bg-brand-400" style="height:62%"></div>
+                      <div class="flex-1 rounded-t-md bg-gold" style="height:88%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- floating chip -->
+            <div class="hidden sm:flex absolute -bottom-5 -left-5 items-center gap-3 rounded-2xl bg-white shadow-soft ring-1 ring-ink/5 px-4 py-3">
+              <span class="grid place-items-center w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600">
+                <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              <div>
+                <p class="text-[13px] font-extrabold text-ink leading-none">Alerts delivered</p>
+                <p class="text-[11.5px] font-semibold text-ink/50 mt-1">SMS · App · Radio</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- wave divider -->
+    <div class="relative">
+      <svg class="block w-full h-[60px] text-white" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="currentColor" d="M0 60V28c180 24 360 24 540 6s360-24 540-6 240 24 360 18v14Z"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PARTNERS MARQUEE
+  ============================================================ -->
+  <section class="py-12 lg:py-14 border-b border-ink/5">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <p class="text-center text-[12px] font-extrabold uppercase tracking-[.22em] text-ink/35">
+        Working alongside
+      </p>
+    </div>
+    <div class="marquee mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)]">
+      <div class="marquee-track gap-14 pr-14">
+        <!-- Set A -->
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">Ministry of Peace Building</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">UNDP</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">National Communication Authority</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">MTN South Sudan</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">University of Juba</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">Community Radio Network</span>
+        <!-- Set B (duplicate) -->
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">Ministry of Peace Building</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">UNDP</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">National Communication Authority</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">MTN South Sudan</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">University of Juba</span>
+        <span class="font-display text-xl font-bold text-ink/30 whitespace-nowrap">Community Radio Network</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     ABOUT
+============================================================ -->
+<section id="about" class="relative py-20 lg:py-28 overflow-hidden">
+
+  <!-- Soft ambience -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[900px] h-[520px] rounded-full bg-brand-50 blur-3xl opacity-80"></div>
+    <div class="absolute bottom-0 right-0 w-[500px] h-[400px] rounded-full bg-gold/5 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+    <!-- ================= HEADING ROW ================= -->
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+      <div class="lg:col-span-7">
+        <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-brand-600">
+          <span class="w-6 h-px bg-brand-600"></span> Who we are
+        </p>
+        <h2 class="reveal mt-5 font-display text-[32px] sm:text-[42px] lg:text-[46px] font-extrabold leading-[1.1] tracking-tight">
+          A home for South Sudanese
+          <span class="relative inline-block">
+            <span class="relative z-10">problem-solvers.</span>
+            <svg class="absolute left-0 -bottom-1 w-full h-3 text-gold" viewBox="0 0 300 12" preserveAspectRatio="none" fill="none" aria-hidden="true">
+              <path d="M2 9C60 3 140 2 298 6" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h2>
+      </div>
+
+      <div class="lg:col-span-5">
+        <p class="reveal text-[16.5px] leading-relaxed text-ink/60">
+          We believe the best solutions to South Sudan's challenges will be built by South Sudanese.
+          Our job is to give them the tools, data and platforms to do it.
+        </p>
+      </div>
+    </div>
+
+    <!-- ================= MAIN SPLIT ================= -->
+    <div class="mt-14 lg:mt-20 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+      <!-- ---------- IMAGE ---------- -->
+      <div class="lg:col-span-6 reveal">
+        <div class="relative">
+
+          <!-- Glow behind -->
+          <div class="absolute -inset-6 bg-gradient-to-tr from-brand-600/25 via-gold/15 to-transparent blur-3xl rounded-full" aria-hidden="true"></div>
+
+          <!-- Main image card -->
+          <figure class="relative rounded-4xl overflow-hidden ring-1 ring-ink/5 shadow-glow bg-ink/5">
+            <img
+              src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=1400&q=80"
+              alt="Community members collaborating in South Sudan"
+              loading="lazy"
+              decoding="async"
+              class="w-full h-[420px] sm:h-[520px] object-cover transition-transform duration-[1200ms] ease-out hover:scale-105" />
+
+            <!-- Gradient overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/15 to-transparent"></div>
+
+            <!-- Caption -->
+            <figcaption class="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+              <p class="text-[12px] font-extrabold uppercase tracking-[.18em] text-gold">Since 2021</p>
+              <p class="mt-2 font-display text-xl sm:text-2xl font-extrabold text-white leading-snug max-w-sm">
+                Built in Juba, by and for South Sudanese.
+              </p>
+            </figcaption>
+          </figure>
+
+          <!-- Floating badge — top right -->
+          <div class="hidden sm:inline-flex absolute top-5 right-5 items-center gap-3 rounded-2xl bg-white/95 backdrop-blur shadow-soft ring-1 ring-ink/5 px-4 py-3">
+            <span class="grid place-items-center w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+            </span>
+            <div class="leading-tight">
+              <p class="text-[13px] font-extrabold text-ink">Community-led</p>
+              <p class="text-[11.5px] font-semibold text-ink/45 mt-0.5">Registered non-profit</p>
+            </div>
+          </div>
+
+          <!-- Floating stat card — bottom left -->
+          <div class="absolute -bottom-6 left-4 sm:-left-8 flex items-center gap-4 rounded-3xl bg-white shadow-soft ring-1 ring-ink/5 px-5 py-4">
+            <span class="grid place-items-center w-11 h-11 rounded-2xl bg-brand-600 text-white shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </span>
+            <div class="leading-tight">
+              <p class="font-display text-[20px] font-extrabold text-ink leading-none">10</p>
+              <p class="text-[12.5px] font-semibold text-ink/50 mt-1 whitespace-nowrap">states reached</p>
+            </div>
+          </div>
+
+          <!-- Decorative dots -->
+          <div class="hidden lg:block absolute -bottom-8 right-8 w-24 h-24 opacity-40" aria-hidden="true">
+            <svg viewBox="0 0 100 100" fill="none">
+              <defs>
+                <pattern id="about-dots" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="1.6" fill="#2231B0"/>
+                </pattern>
+              </defs>
+              <rect width="100" height="100" fill="url(#about-dots)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- CONTENT CARDS ---------- -->
+      <div class="lg:col-span-6 space-y-5">
+
+        <!-- Mission -->
+        <article class="reveal relative overflow-hidden rounded-3xl bg-brand-600 text-white p-7 sm:p-8 shadow-glow">
+          <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/10 blur-3xl" aria-hidden="true"></div>
+          <div class="relative">
+            <span class="grid place-items-center w-12 h-12 rounded-2xl bg-white/15 ring-1 ring-white/20">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+              </svg>
+            </span>
+            <p class="mt-5 text-[11.5px] font-extrabold uppercase tracking-[.18em] text-gold">Our Mission</p>
+            <h3 class="mt-2 font-display text-[22px] font-extrabold leading-snug">
+              Technology in service of community.
+            </h3>
+            <p class="mt-3 text-[15px] leading-relaxed text-white/75">
+              To leverage technology, innovation and community-driven solutions to address the
+              social, economic and humanitarian challenges facing South Sudan.
+            </p>
+          </div>
+        </article>
+
+        <!-- Vision -->
+        <article class="reveal rounded-3xl bg-ink/[.03] ring-1 ring-ink/5 p-7 sm:p-8 hover:bg-white hover:shadow-soft transition-all duration-300">
+          <div class="flex items-start gap-5">
+            <span class="grid place-items-center w-12 h-12 rounded-2xl bg-gold/20 text-[#a67c00] shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </span>
+            <div>
+              <p class="text-[11.5px] font-extrabold uppercase tracking-[.18em] text-[#a67c00]">Our Vision</p>
+              <h3 class="mt-2 font-display text-[19px] font-bold leading-snug">A connected South Sudan.</h3>
+              <p class="mt-2.5 text-[14.5px] leading-relaxed text-ink/60">
+                Every community has the information it needs to prepare, respond and prosper.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Values -->
+        <article class="reveal rounded-3xl bg-ink/[.03] ring-1 ring-ink/5 p-7 sm:p-8 hover:bg-white hover:shadow-soft transition-all duration-300">
+          <div class="flex items-start gap-5">
+            <span class="grid place-items-center w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </span>
+            <div class="min-w-0">
+              <p class="text-[11.5px] font-extrabold uppercase tracking-[.18em] text-emerald-700">Our Values</p>
+              <h3 class="mt-2 font-display text-[19px] font-bold leading-snug">What we stand for.</h3>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                <li class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-ink/10 px-3 py-1.5 text-[12.5px] font-bold text-ink/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span> Openness
+                </li>
+                <li class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-ink/10 px-3 py-1.5 text-[12.5px] font-bold text-ink/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span> Data integrity
+                </li>
+                <li class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-ink/10 px-3 py-1.5 text-[12.5px] font-bold text-ink/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span> Community first
+                </li>
+                <li class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-ink/10 px-3 py-1.5 text-[12.5px] font-bold text-ink/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span> Build &amp; learn
+                </li>
+                <li class="inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-ink/10 px-3 py-1.5 text-[12.5px] font-bold text-ink/70">
+                  <span class="w-1.5 h-1.5 rounded-full bg-brand-600"></span> Do no harm
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- CTA -->
+        <div class="reveal pt-2">
+          <a href="#" class="group inline-flex items-center gap-2.5 rounded-2xl bg-ink text-white px-6 py-4 text-[15px] font-bold hover:bg-brand-600 hover:-translate-y-0.5 transition-all duration-300">
+            Read our full story
+            <span class="grid place-items-center w-6 h-6 rounded-full bg-white/15 group-hover:bg-white/25 transition">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+ <!-- ============================================================
+     PROGRAMS
+============================================================ -->
+<section id="programs" class="relative py-20 lg:py-28 bg-ink/[.02] border-y border-ink/5 overflow-hidden">
+
+  <!-- Ambient background -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute top-0 left-1/4 w-[600px] h-[400px] rounded-full bg-brand-100/40 blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-[500px] h-[400px] rounded-full bg-gold/5 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+    <!-- ================= HEADER ================= -->
+    <div class="max-w-3xl">
+      <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-brand-600">
+        <span class="w-6 h-px bg-brand-600"></span> What we do
+      </p>
+      <h2 class="reveal mt-5 font-display text-[32px] sm:text-[42px] lg:text-[46px] font-extrabold leading-[1.1] tracking-tight">
+        Programs built for
+        <span class="relative inline-block">
+          <span class="relative z-10">real life</span>
+          <svg class="absolute left-0 -bottom-1 w-full h-3 text-gold" viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" aria-hidden="true">
+            <path d="M2 9C50 3 120 2 198 6" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </span>
+        in South Sudan.
+      </h2>
+      <p class="reveal mt-5 text-[16.5px] leading-relaxed text-ink/60">
+        Every product we ship starts with a community problem and ends with something people
+        can actually use — on a basic phone, on a slow connection, in their own language.
+      </p>
+    </div>
+
+    <!-- ================= PROGRAM CARDS ================= -->
+    <div class="mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
+
+      <!-- ============ AlertGuard ============ -->
+      <article class="reveal group relative flex flex-col rounded-4xl bg-white ring-1 ring-ink/5 overflow-hidden shadow-soft hover:shadow-glow hover:-translate-y-2 transition-all duration-500">
+
+        <!-- Image header -->
+        <div class="relative h-52 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=1200&q=80"
+            alt="Early warning and hazard monitoring"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-brand-950/85 via-brand-900/30 to-transparent"></div>
+
+          <!-- Floating icon -->
+          <span class="absolute top-4 left-4 grid place-items-center w-12 h-12 rounded-2xl bg-white/95 backdrop-blur ring-1 ring-white/40 text-brand-700 shadow-soft">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.3 3.6a2 2 0 0 1 3.4 0l7 11.4A2 2 0 0 1 19 18H5a2 2 0 0 1-1.7-3L10.3 3.6Z"/>
+              <path d="M12 9v4M12 16h.01"/>
+            </svg>
+          </span>
+
+          <!-- Live badge -->
+          <span class="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur ring-1 ring-white/25 px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-wider text-white">
+            <span class="relative flex w-1.5 h-1.5 text-emerald-400">
+              <span class="absolute inset-0 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="relative w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            </span>
+            Live
+          </span>
+
+          <!-- Title on image -->
+          <div class="absolute bottom-4 left-5 right-5">
+            <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-gold">Flagship program</p>
+            <h3 class="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">AlertGuard</h3>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="flex flex-col flex-1 p-7">
+          <p class="text-[15px] leading-relaxed text-ink/60 flex-1">
+            A web and mobile early warning system that monitors hazards in real time and sends
+            timely alerts to vulnerable communities — so people can move before disaster strikes.
+          </p>
+
+          <ul class="mt-6 space-y-2.5 text-[13.5px] font-semibold text-ink/70">
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-brand-50 text-brand-600 shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Real-time hazard monitoring
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-brand-50 text-brand-600 shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              SMS &amp; app alerts
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-brand-50 text-brand-600 shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Geospatial forecasting
+            </li>
+          </ul>
+
+          <a href="#alerts" class="mt-7 inline-flex items-center justify-between gap-3 rounded-2xl bg-brand-600 text-white px-5 py-3.5 text-[14.5px] font-bold shadow-glow hover:bg-brand-700 transition-all duration-300 group/btn">
+            Get alerts
+            <span class="grid place-items-center w-7 h-7 rounded-full bg-white/15 group-hover/btn:bg-white/25 group-hover/btn:translate-x-0.5 transition">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <!-- ============ Betna ============ -->
+      <article class="reveal group relative flex flex-col rounded-4xl bg-white ring-1 ring-ink/5 overflow-hidden shadow-soft hover:shadow-glow hover:-translate-y-2 transition-all duration-500" style="transition-delay:.08s">
+
+        <!-- Image header -->
+        <div class="relative h-52 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+            alt="Community members collaborating and sharing skills"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-amber-950/85 via-amber-900/25 to-transparent"></div>
+
+          <!-- Floating icon -->
+          <span class="absolute top-4 left-4 grid place-items-center w-12 h-12 rounded-2xl bg-white/95 backdrop-blur ring-1 ring-white/40 text-[#a67c00] shadow-soft">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </span>
+
+          <!-- Members badge -->
+          <span class="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur ring-1 ring-white/25 px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-wider text-white">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            </svg>
+            1.5K+
+          </span>
+
+          <!-- Title on image -->
+          <div class="absolute bottom-4 left-5 right-5">
+            <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-gold">Community platform</p>
+            <h3 class="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">
+              Betna <span class="text-white/50 font-bold text-base">· Our Home</span>
+            </h3>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="flex flex-col flex-1 p-7">
+          <p class="text-[15px] leading-relaxed text-ink/60 flex-1">
+            An online skills-development connector and crowdsourcing platform where South
+            Sudanese collaborate, share data and solve community problems together.
+          </p>
+
+          <ul class="mt-6 space-y-2.5 text-[13.5px] font-semibold text-ink/70">
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-gold/20 text-[#a67c00] shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Skills matching
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-gold/20 text-[#a67c00] shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Open data crowdsourcing
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-gold/20 text-[#a67c00] shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Peer learning circles
+            </li>
+          </ul>
+
+          <a href="#get-involved" class="mt-7 inline-flex items-center justify-between gap-3 rounded-2xl bg-ink text-white px-5 py-3.5 text-[14.5px] font-bold hover:bg-[#a67c00] transition-all duration-300 group/btn">
+            Join Betna
+            <span class="grid place-items-center w-7 h-7 rounded-full bg-white/15 group-hover/btn:bg-white/25 group-hover/btn:translate-x-0.5 transition">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <!-- ============ Eventy ============ -->
+      <article class="reveal group relative flex flex-col rounded-4xl bg-white ring-1 ring-ink/5 overflow-hidden shadow-soft hover:shadow-glow hover:-translate-y-2 transition-all duration-500 md:col-span-2 lg:col-span-1" style="transition-delay:.16s">
+
+        <!-- Image header -->
+        <div class="relative h-52 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80"
+            alt="Community event and gathering"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/85 via-emerald-900/25 to-transparent"></div>
+
+          <!-- Floating icon -->
+          <span class="absolute top-4 left-4 grid place-items-center w-12 h-12 rounded-2xl bg-white/95 backdrop-blur ring-1 ring-white/40 text-emerald-700 shadow-soft">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <path d="M16 2v4M8 2v4M3 10h18"/>
+              <path d="m9 16 2 2 4-4"/>
+            </svg>
+          </span>
+
+          <!-- Events badge -->
+          <span class="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur ring-1 ring-white/25 px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-wider text-white">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+            Open
+          </span>
+
+          <!-- Title on image -->
+          <div class="absolute bottom-4 left-5 right-5">
+            <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-gold">Events platform</p>
+            <h3 class="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">Eventy</h3>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="flex flex-col flex-1 p-7">
+          <p class="text-[15px] leading-relaxed text-ink/60 flex-1">
+            A simple way for communities, hubs and organisations to publish, discover and manage
+            events — from trainings and hackathons to peace dialogues.
+          </p>
+
+          <ul class="mt-6 space-y-2.5 text-[13.5px] font-semibold text-ink/70">
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Event publishing
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              RSVPs &amp; reminders
+            </li>
+            <li class="flex items-center gap-2.5">
+              <span class="grid place-items-center w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+              Offline-friendly
+            </li>
+          </ul>
+
+          <a href="#news" class="mt-7 inline-flex items-center justify-between gap-3 rounded-2xl bg-emerald-600 text-white px-5 py-3.5 text-[14.5px] font-bold hover:bg-emerald-700 transition-all duration-300 group/btn">
+            Browse events
+            <span class="grid place-items-center w-7 h-7 rounded-full bg-white/15 group-hover/btn:bg-white/25 group-hover/btn:translate-x-0.5 transition">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- ================= SEE ALL PROGRAMS CTA ================= -->
+    <div class="reveal mt-14">
+      <div class="relative overflow-hidden rounded-4xl bg-gradient-to-br from-ink via-brand-950 to-brand-900 text-white px-8 py-10 sm:px-12 sm:py-12 shadow-glow">
+        <!-- Grid lines -->
+        <div class="absolute inset-0 grid-lines opacity-50" aria-hidden="true"></div>
+        <!-- Glow -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-brand-500/25 blur-3xl" aria-hidden="true"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-gold/15 blur-3xl" aria-hidden="true"></div>
+
+        <div class="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          <div class="max-w-xl">
+            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[.16em] text-gold">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+              Full portfolio
+            </span>
+            <h3 class="mt-4 font-display text-[26px] sm:text-[32px] font-extrabold leading-tight tracking-tight">
+              There’s more where that came from.
+            </h3>
+            <p class="mt-3 text-[15.5px] leading-relaxed text-white/70">
+              Explore every program, pilot and partnership OSS is running across South Sudan —
+              including peacebuilding, digital inclusion and open data work.
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+            <a href="#" class="group inline-flex items-center justify-center gap-2.5 rounded-2xl bg-white text-ink px-7 py-4 text-[15px] font-bold hover:bg-gold hover:-translate-y-0.5 transition-all duration-300">
+              See all programs
+              <span class="grid place-items-center w-6 h-6 rounded-full bg-ink/10 group-hover:bg-ink/20 group-hover:translate-x-0.5 transition">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+            <a href="#contact" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white/10 ring-1 ring-white/20 backdrop-blur px-7 py-4 text-[15px] font-bold text-white hover:bg-white/20 transition-all duration-300">
+              Suggest a project
+            </a>
+          </div>
+        </div>
+
+        <!-- Bottom stat strip -->
+        <div class="relative mt-10 pt-8 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-6">
+          <div>
+            <p class="font-display text-[24px] font-extrabold leading-none">3+</p>
+            <p class="mt-2 text-[12.5px] font-semibold text-white/55">Core programs</p>
+          </div>
+          <div>
+            <p class="font-display text-[24px] font-extrabold leading-none">10</p>
+            <p class="mt-2 text-[12.5px] font-semibold text-white/55">States reached</p>
+          </div>
+          <div>
+            <p class="font-display text-[24px] font-extrabold leading-none">100%</p>
+            <p class="mt-2 text-[12.5px] font-semibold text-white/55">Open source</p>
+          </div>
+          <div>
+            <p class="font-display text-[24px] font-extrabold leading-none">24/7</p>
+            <p class="mt-2 text-[12.5px] font-semibold text-white/55">Alert monitoring</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ============================================================
+       IMPACT COUNTERS
+  ============================================================ -->
+  <section id="impact" class="py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-4xl mesh text-white px-8 py-14 lg:px-16 lg:py-20">
+        <div class="absolute inset-0 grid-lines" aria-hidden="true"></div>
+        <div class="relative">
+
+          <div class="max-w-2xl">
+            <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-gold">
+              <span class="w-6 h-px bg-gold"></span> Our impact
+            </p>
+            <h2 class="reveal mt-5 font-display text-[30px] sm:text-[40px] font-extrabold leading-[1.14] tracking-tight">
+              Small team. Real numbers. Growing every season.
+            </h2>
+          </div>
+
+          <!-- Replace these with verified figures before launch -->
+          <dl class="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+            <div class="reveal">
+              <dd class="font-display text-[42px] sm:text-[52px] font-extrabold tracking-tight leading-none">
+                <span class="counter" data-count="24" data-suffix="K+">0</span>
+              </dd>
+              <dt class="mt-3 text-[13.5px] font-semibold text-white/55 leading-snug">People reached with alerts &amp; information</dt>
+            </div>
+            <div class="reveal" style="transition-delay:.08s">
+              <dd class="font-display text-[42px] sm:text-[52px] font-extrabold tracking-tight leading-none">
+                <span class="counter" data-count="10" data-suffix="">0</span>
+              </dd>
+              <dt class="mt-3 text-[13.5px] font-semibold text-white/55 leading-snug">States with active community monitors</dt>
+            </div>
+            <div class="reveal" style="transition-delay:.16s">
+              <dd class="font-display text-[42px] sm:text-[52px] font-extrabold tracking-tight leading-none">
+                <span class="counter" data-count="1500" data-suffix="+">0</span>
+              </dd>
+              <dt class="mt-3 text-[13.5px] font-semibold text-white/55 leading-snug">Youth trained in digital skills</dt>
+            </div>
+            <div class="reveal" style="transition-delay:.24s">
+              <dd class="font-display text-[42px] sm:text-[52px] font-extrabold tracking-tight leading-none">
+                <span class="counter" data-count="12" data-suffix="">0</span>
+              </dd>
+              <dt class="mt-3 text-[13.5px] font-semibold text-white/55 leading-snug">Active partners &amp; institutions</dt>
+            </div>
+          </dl>
+
+          <p class="reveal mt-12 text-[12.5px] font-medium text-white/35">
+            Figures are illustrative placeholders — update with verified OSS data before launch.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     APPROACH / HOW IT WORKS
+============================================================ -->
+<section class="relative py-20 lg:py-28 bg-ink/[.02] border-y border-ink/5 overflow-hidden">
+
+  <!-- Ambient background -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute top-0 right-1/4 w-[600px] h-[400px] rounded-full bg-brand-100/50 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/4 w-[500px] h-[400px] rounded-full bg-gold/5 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+    <!-- ================= HEADER ================= -->
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+      <div class="lg:col-span-7">
+        <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-brand-600">
+          <span class="w-6 h-px bg-brand-600"></span> How we work
+        </p>
+        <h2 class="reveal mt-5 font-display text-[32px] sm:text-[42px] lg:text-[46px] font-extrabold leading-[1.1] tracking-tight">
+          Community-led, evidence-driven,
+          <span class="relative inline-block">
+            <span class="relative z-10">open by default.</span>
+            <svg class="absolute left-0 -bottom-1 w-full h-3 text-gold" viewBox="0 0 300 12" preserveAspectRatio="none" fill="none" aria-hidden="true">
+              <path d="M2 9C60 3 140 2 298 6" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h2>
+      </div>
+
+      <div class="lg:col-span-5">
+        <p class="reveal text-[16.5px] leading-relaxed text-ink/60">
+          Four steps. One promise: nothing we build stays on paper — it reaches the people
+          who need it most.
+        </p>
+      </div>
+    </div>
+
+    <!-- ================= STEPS ================= -->
+    <div class="relative mt-16 lg:mt-20">
+
+      <!-- Desktop connecting line -->
+      <div class="hidden lg:block absolute top-[46px] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-brand-200 via-brand-300 to-brand-200" aria-hidden="true">
+        <div class="absolute -top-1 left-0 w-2 h-2 rounded-full bg-brand-300"></div>
+        <div class="absolute -top-1 right-0 w-2 h-2 rounded-full bg-brand-300"></div>
+      </div>
+
+      <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
+
+        <!-- STEP 01 — Listen -->
+        <li class="reveal group relative">
+          <div class="relative flex flex-col h-full rounded-4xl bg-white ring-1 ring-ink/5 p-7 shadow-soft hover:shadow-glow hover:-translate-y-2 transition-all duration-500">
+
+            <!-- Step number badge -->
+            <div class="relative flex items-center gap-4">
+              <span class="relative grid place-items-center w-16 h-16 rounded-3xl bg-brand-50 ring-1 ring-brand-100 text-brand-700 shrink-0 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600 transition-all duration-500">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 11v2a4 4 0 0 0 4 4h1l4 4v-6"/>
+                  <path d="M15.5 8.5a4 4 0 0 0-5.7-5.6M19 12a8 8 0 0 0-8-8"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 grid place-items-center w-6 h-6 rounded-full bg-ink text-white text-[11px] font-extrabold ring-2 ring-white">1</span>
+              </span>
+              <div>
+                <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-brand-600">Step 01</p>
+                <h3 class="mt-1 font-display text-[20px] font-extrabold tracking-tight">Listen</h3>
+              </div>
+            </div>
+
+            <p class="mt-5 text-[14.5px] leading-relaxed text-ink/60 flex-1">
+              We start in the community — mapping the problem with the people who live it,
+              in their language and on their terms.
+            </p>
+
+            <!-- mini tags -->
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full bg-ink/[.04] px-2.5 py-1 text-[11px] font-bold text-ink/55">Field visits</span>
+              <span class="rounded-full bg-ink/[.04] px-2.5 py-1 text-[11px] font-bold text-ink/55">Co-design</span>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 02 — Build -->
+        <li class="reveal group relative" style="transition-delay:.08s">
+          <div class="relative flex flex-col h-full rounded-4xl bg-white ring-1 ring-ink/5 p-7 shadow-soft hover:shadow-glow hover:-translate-y-2 transition-all duration-500">
+
+            <div class="relative flex items-center gap-4">
+              <span class="relative grid place-items-center w-16 h-16 rounded-3xl bg-brand-50 ring-1 ring-brand-100 text-brand-700 shrink-0 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600 transition-all duration-500">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m8 6-6 6 6 6M16 6l6 6-6 6"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 grid place-items-center w-6 h-6 rounded-full bg-ink text-white text-[11px] font-extrabold ring-2 ring-white">2</span>
+              </span>
+              <div>
+                <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-brand-600">Step 02</p>
+                <h3 class="mt-1 font-display text-[20px] font-extrabold tracking-tight">Build</h3>
+              </div>
+            </div>
+
+            <p class="mt-5 text-[14.5px] leading-relaxed text-ink/60 flex-1">
+              We prototype lightweight tools that work on low bandwidth, basic devices and
+              across multiple South Sudanese languages.
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full bg-ink/[.04] px-2.5 py-1 text-[11px] font-bold text-ink/55">Low-bandwidth</span>
+              <span class="rounded-full bg-ink/[.04] px-2.5 py-1 text-[11px] font-bold text-ink/55">Offline-first</span>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 03 — Test -->
+        <li class="reveal group relative" style="transition-delay:.16s">
+          <div class="relative flex flex-col h-full rounded-4xl bg-white ring-1 ring-ink/5 p-7 shadow-soft hover:shadow-glow hover:-translate-y-2 transition-all duration-500">
+
+            <div class="relative flex items-center gap-4">
+              <span class="relative grid place-items-center w-16 h-16 rounded-3xl bg-gold/15 ring-1 ring-gold/30 text-[#a67c00] shrink-0 group-hover:bg-gold group-hover:text-ink group-hover:ring-gold transition-all duration-500">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 11H3v10h6V11ZM21 3h-6v18h6V3ZM15 7H9v14h6V7Z"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 grid place-items-center w-6 h-6 rounded-full bg-ink text-white text-[11px] font-extrabold ring-2 ring-white">3</span>
+              </span>
+              <div>
+                <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-[#a67c00]">Step 03</p>
+                <h3 class="mt-1 font-display text-[20px] font-extrabold tracking-tight">Test</h3>
+              </div>
+            </div>
+
+            <p class="mt-5 text-[14.5px] leading-relaxed text-ink/60 flex-1">
+              We pilot with local partners, measure what actually changes and iterate fast
+              until the numbers — and the people — say it works.
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full bg-ink/[.04] px-2.5 py-1 text-[11px] font-bold text-ink/55">Pilots</span>
+              <span class="rounded-full bg-ink/[.04] px-2.5 py-1 text-[11px] font-bold text-ink/55">Impact data</span>
+            </div>
+          </div>
+        </li>
+
+        <!-- STEP 04 — Scale & share -->
+        <li class="reveal group relative" style="transition-delay:.24s">
+          <div class="relative flex flex-col h-full rounded-4xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 text-white p-7 shadow-glow hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+
+            <!-- glow -->
+            <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-gold/20 blur-3xl" aria-hidden="true"></div>
+            <div class="absolute inset-0 grid-lines opacity-40" aria-hidden="true"></div>
+
+            <div class="relative flex items-center gap-4">
+              <span class="relative grid place-items-center w-16 h-16 rounded-3xl bg-white/15 ring-1 ring-white/25 text-white shrink-0 group-hover:bg-gold group-hover:text-ink group-hover:ring-gold transition-all duration-500">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V4s-1 1-4 1-5-2-8-2-4 1-4 1Z"/>
+                  <path d="M4 22v-7"/>
+                </svg>
+                <span class="absolute -top-2 -right-2 grid place-items-center w-6 h-6 rounded-full bg-gold text-ink text-[11px] font-extrabold ring-2 ring-brand-700">4</span>
+              </span>
+              <div>
+                <p class="text-[11px] font-extrabold uppercase tracking-[.18em] text-gold">Step 04</p>
+                <h3 class="mt-1 font-display text-[20px] font-extrabold tracking-tight">Scale &amp; share</h3>
+              </div>
+            </div>
+
+            <p class="relative mt-5 text-[14.5px] leading-relaxed text-white/75 flex-1">
+              We open-source the code, publish the data and hand ownership to communities —
+              so the solution outlives us.
+            </p>
+
+            <div class="relative mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full bg-white/10 ring-1 ring-white/15 px-2.5 py-1 text-[11px] font-bold text-white/75">Open source</span>
+              <span class="rounded-full bg-white/10 ring-1 ring-white/15 px-2.5 py-1 text-[11px] font-bold text-white/75">Open data</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ================= FOOTNOTE / PROMISE BAR ================= -->
+    <div class="reveal mt-14">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 rounded-3xl bg-white ring-1 ring-ink/5 px-6 sm:px-8 py-6 shadow-soft">
+
+        <div class="flex items-center gap-4">
+          <span class="grid place-items-center w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <div>
+            <p class="font-display text-[16px] font-extrabold text-ink leading-snug">
+              Our promise: no pilot without a plan to hand it over.
+            </p>
+            <p class="text-[13.5px] text-ink/55 mt-0.5">
+              Every project ships with documentation, training and a local owner.
+            </p>
+          </div>
+        </div>
+
+        <a href="#programs" class="group inline-flex items-center gap-2.5 rounded-2xl bg-ink text-white px-5 py-3.5 text-[14.5px] font-bold hover:bg-brand-600 transition-all duration-300 shrink-0">
+          See it in our work
+          <span class="grid place-items-center w-6 h-6 rounded-full bg-white/15 group-hover:bg-white/25 group-hover:translate-x-0.5 transition">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ============================================================
+       STORIES
+  ============================================================ -->
+  <section id="stories" class="py-20 lg:py-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-brand-600">
+            <span class="w-6 h-px bg-brand-600"></span> Stories from the field
+          </p>
+          <h2 class="reveal mt-5 font-display text-[30px] sm:text-[40px] font-extrabold leading-[1.14] tracking-tight">
+            What changes when information arrives on time.
+          </h2>
+        </div>
+        <a href="#" class="reveal inline-flex items-center gap-2 text-[14.5px] font-bold text-brand-700 hover:gap-3 transition-all">
+          All stories
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="mt-12 grid md:grid-cols-3 gap-6">
+        <blockquote class="reveal rounded-3xl bg-ink/[.03] ring-1 ring-ink/5 p-7 flex flex-col">
+          <svg class="w-8 h-8 text-brand-200" viewBox="0 0 24 24" fill="currentColor"><path d="M7.2 6C4.9 6 3 7.9 3 10.2c0 2.2 1.8 4 4 4 .3 0 .6 0 .9-.1-.5 1.6-1.9 2.8-3.6 3.2l.6 1.8c3.7-.9 6.3-4.2 6.3-8.2V10c0-2.3-1.8-4-4-4Zm10 0c-2.3 0-4 1.9-4 4.2 0 2.2 1.8 4 4 4 .3 0 .6 0 .9-.1-.5 1.6-1.9 2.8-3.6 3.2l.6 1.8c3.7-.9 6.3-4.2 6.3-8.2V10c0-2.3-1.9-4-4.2-4Z"/></svg>
+          <p class="mt-5 text-[15.5px] leading-relaxed text-ink/75 flex-1">
+            "The alert came two days before the water reached us. We moved the grain and the
+            children first. That has never happened before."
+          </p>
+          <footer class="mt-6 pt-5 border-t border-ink/10">
+            <p class="text-[14px] font-bold text-ink">Community monitor</p>
+            <p class="text-[13px] text-ink/50">Bor County, Jonglei</p>
+          </footer>
+        </blockquote>
+
+        <blockquote class="reveal rounded-3xl bg-ink/[.03] ring-1 ring-ink/5 p-7 flex flex-col" style="transition-delay:.08s">
+          <svg class="w-8 h-8 text-brand-200" viewBox="0 0 24 24" fill="currentColor"><path d="M7.2 6C4.9 6 3 7.9 3 10.2c0 2.2 1.8 4 4 4 .3 0 .6 0 .9-.1-.5 1.6-1.9 2.8-3.6 3.2l.6 1.8c3.7-.9 6.3-4.2 6.3-8.2V10c0-2.3-1.8-4-4-4Zm10 0c-2.3 0-4 1.9-4 4.2 0 2.2 1.8 4 4 4 .3 0 .6 0 .9-.1-.5 1.6-1.9 2.8-3.6 3.2l.6 1.8c3.7-.9 6.3-4.2 6.3-8.2V10c0-2.3-1.9-4-4.2-4Z"/></svg>
+          <p class="mt-5 text-[15.5px] leading-relaxed text-ink/75 flex-1">
+            "I found my first paying client through Betna. It was the first time anyone asked
+            what I could do — not where I came from."
+          </p>
+          <footer class="mt-6 pt-5 border-t border-ink/10">
+            <p class="text-[14px] font-bold text-ink">Betna member</p>
+            <p class="text-[13px] text-ink/50">Juba, Central Equatoria</p>
+          </footer>
+        </blockquote>
+
+        <blockquote class="reveal rounded-3xl bg-ink/[.03] ring-1 ring-ink/5 p-7 flex flex-col" style="transition-delay:.16s">
+          <svg class="w-8 h-8 text-brand-200" viewBox="0 0 24 24" fill="currentColor"><path d="M7.2 6C4.9 6 3 7.9 3 10.2c0 2.2 1.8 4 4 4 .3 0 .6 0 .9-.1-.5 1.6-1.9 2.8-3.6 3.2l.6 1.8c3.7-.9 6.3-4.2 6.3-8.2V10c0-2.3-1.8-4-4-4Zm10 0c-2.3 0-4 1.9-4 4.2 0 2.2 1.8 4 4 4 .3 0 .6 0 .9-.1-.5 1.6-1.9 2.8-3.6 3.2l.6 1.8c3.7-.9 6.3-4.2 6.3-8.2V10c0-2.3-1.9-4-4.2-4Z"/></svg>
+          <p class="mt-5 text-[15.5px] leading-relaxed text-ink/75 flex-1">
+            "Having the data open meant our radio station could broadcast facts instead of
+            rumours. That changed the whole conversation."
+          </p>
+          <footer class="mt-6 pt-5 border-t border-ink/10">
+            <p class="text-[14px] font-bold text-ink">Partner radio producer</p>
+            <p class="text-[13px] text-ink/50">Community Radio Network</p>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ALERTS / REPORT A HAZARD
+  ============================================================ -->
+  <section id="alerts" class="py-20 lg:py-28 bg-ink/[.02] border-y border-ink/5">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+
+        <div>
+          <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-brand-600">
+            <span class="w-6 h-px bg-brand-600"></span> AlertGuard
+          </p>
+          <h2 class="reveal mt-5 font-display text-[30px] sm:text-[40px] font-extrabold leading-[1.14] tracking-tight">
+            Get alerts. Report a hazard. Save a life.
+          </h2>
+          <p class="reveal mt-5 text-[16.5px] leading-relaxed text-ink/60">
+            Sign up to receive early warnings for your area by SMS or app — and help your
+            community by reporting hazards you see on the ground. Every report makes the
+            system smarter for everyone.
+          </p>
+
+          <div class="reveal mt-8 grid sm:grid-cols-2 gap-4">
+            <div class="flex items-start gap-3 rounded-2xl bg-white ring-1 ring-ink/5 p-5">
+              <span class="grid place-items-center w-9 h-9 rounded-xl bg-brand-50 text-brand-700 shrink-0">
+                <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+              </span>
+              <div>
+                <p class="text-[14.5px] font-bold">SMS alerts</p>
+                <p class="text-[13.5px] text-ink/55 mt-0.5">Works on any phone</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 rounded-2xl bg-white ring-1 ring-ink/5 p-5">
+              <span class="grid place-items-center w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 shrink-0">
+                <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <div>
+                <p class="text-[14.5px] font-bold">Location based</p>
+                <p class="text-[13.5px] text-ink/55 mt-0.5">Alerts for your county</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form card -->
+        <div class="reveal">
+          <div class="rounded-4xl bg-white ring-1 ring-ink/5 shadow-soft p-7 sm:p-9">
+            <h3 class="font-display text-xl font-extrabold">Sign up for alerts</h3>
+            <p class="mt-2 text-[14px] text-ink/55">Free. No data charges for SMS alerts.</p>
+
+            <form id="alerts-form" class="mt-7 space-y-4" novalidate>
+              <div>
+                <label for="al-name" class="block text-[13px] font-bold text-ink/70 mb-1.5">Full name</label>
+                <input id="al-name" name="name" type="text" required autocomplete="name"
+                  class="w-full rounded-2xl border border-ink/10 bg-ink/[.02] px-4 py-3.5 text-[15px] placeholder-ink/35 focus:bg-white focus:border-brand-400 transition"
+                  placeholder="e.g. Nyakuoth Deng" />
+              </div>
+
+              <div>
+                <label for="al-phone" class="block text-[13px] font-bold text-ink/70 mb-1.5">Phone number</label>
+                <div class="flex rounded-2xl border border-ink/10 bg-ink/[.02] focus-within:bg-white focus-within:border-brand-400 transition overflow-hidden">
+                  <span class="grid place-items-center px-4 text-[15px] font-bold text-ink/50 border-r border-ink/10">+211</span>
+                  <input id="al-phone" name="phone" type="tel" required autocomplete="tel" inputmode="numeric"
+                    class="flex-1 bg-transparent px-4 py-3.5 text-[15px] placeholder-ink/35 focus:outline-none"
+                    placeholder="92 270 2881" />
+                </div>
+              </div>
+
+              <div>
+                <label for="al-state" class="block text-[13px] font-bold text-ink/70 mb-1.5">State / county</label>
+                <select id="al-state" name="state" required
+                  class="w-full rounded-2xl border border-ink/10 bg-ink/[.02] px-4 py-3.5 text-[15px] focus:bg-white focus:border-brand-400 transition">
+                  <option value="">Select your area…</option>
+                  <option>Central Equatoria</option>
+                  <option>Eastern Equatoria</option>
+                  <option>Western Equatoria</option>
+                  <option>Jonglei</option>
+                  <option>Unity</option>
+                  <option>Upper Nile</option>
+                  <option>Lakes</option>
+                  <option>Warrap</option>
+                  <option>Northern Bahr el Ghazal</option>
+                  <option>Western Bahr el Ghazal</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="flex items-start gap-3 pt-1">
+                <input id="al-consent" type="checkbox" required
+                  class="mt-1 w-4 h-4 rounded border-ink/20 text-brand-600 focus:ring-brand-500" />
+                <label for="al-consent" class="text-[13px] leading-relaxed text-ink/55">
+                  I agree to receive hazard alerts by SMS and accept the
+                  <a href="#" class="font-semibold text-brand-700 underline underline-offset-2">privacy policy</a>.
+                </label>
+              </div>
+
+              <button type="submit"
+                class="w-full rounded-2xl bg-brand-600 px-6 py-4 text-[15px] font-bold text-white shadow-glow hover:bg-brand-700 hover:-translate-y-0.5 transition-all duration-300">
+                Get alerts
+              </button>
+
+              <p id="alerts-msg" class="hidden rounded-2xl bg-emerald-50 ring-1 ring-emerald-100 px-4 py-3.5 text-[14px] font-semibold text-emerald-800"></p>
+            </form>
+
+            <p class="mt-5 text-center text-[13px] text-ink/45">
+              Saw something happening? <a href="tel:+211922702881" class="font-bold text-brand-700 underline underline-offset-2">Call 092 270 2881</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+     NEWS & UPDATES
+============================================================ -->
+<section id="news" class="relative py-20 lg:py-28 overflow-hidden">
+
+  <!-- Ambient background -->
+  <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute top-1/4 right-0 w-[600px] h-[500px] rounded-full bg-brand-100/40 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/4 w-[500px] h-[400px] rounded-full bg-gold/5 blur-3xl"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+    <!-- ================= HEADER ================= -->
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <div class="max-w-2xl">
+        <p class="reveal inline-flex items-center gap-2 text-[12.5px] font-extrabold uppercase tracking-[.18em] text-brand-600">
+          <span class="w-6 h-px bg-brand-600"></span> News &amp; updates
+        </p>
+        <h2 class="reveal mt-5 font-display text-[32px] sm:text-[42px] lg:text-[46px] font-extrabold leading-[1.1] tracking-tight">
+          Latest from
+          <span class="relative inline-block">
+            <span class="relative z-10">Open South Sudan.</span>
+            <svg class="absolute left-0 -bottom-1 w-full h-3 text-gold" viewBox="0 0 300 12" preserveAspectRatio="none" fill="none" aria-hidden="true">
+              <path d="M2 9C60 3 140 2 298 6" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h2>
+        <p class="reveal mt-5 text-[16.5px] leading-relaxed text-ink/60">
+          Stories, milestones and field notes from the work — written by the people doing it.
+        </p>
+      </div>
+
+      <a href="#" class="reveal group hidden sm:inline-flex items-center gap-2.5 rounded-2xl bg-ink/[.04] ring-1 ring-ink/5 hover:bg-ink hover:text-white px-5 py-3.5 text-[14.5px] font-bold transition-all duration-300">
+        All news
+        <span class="grid place-items-center w-6 h-6 rounded-full bg-ink/10 group-hover:bg-white/15 group-hover:translate-x-0.5 transition">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+
+    <!-- ================= FEATURED + LIST ================= -->
+    <div class="mt-14 grid lg:grid-cols-12 gap-6 lg:gap-7">
+
+      <!-- ============ FEATURED ARTICLE ============ -->
+      <a href="#" class="reveal group relative lg:col-span-7 rounded-4xl overflow-hidden ring-1 ring-ink/5 shadow-soft hover:shadow-glow transition-all duration-500 block">
+        <div class="relative h-[380px] sm:h-[460px] lg:h-full lg:min-h-[560px] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1583243552802-94ccb7b3d0ac?auto=format&fit=crop&w=1600&q=80"
+            alt="Community monitors in the field during rainy season"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-105" />
+
+          <!-- Overlays -->
+          <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-tr from-brand-900/40 via-transparent to-transparent"></div>
+
+          <!-- Top row badges -->
+          <div class="absolute top-5 left-5 right-5 flex items-center justify-between gap-3">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-gold text-ink px-3.5 py-1.5 text-[10.5px] font-extrabold uppercase tracking-[.14em]">
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9L22 10l-5.4 4.8L18 22l-6-3.7L6 22l1.4-7.2L2 10l7.1-1.1L12 2z"/></svg>
+              Featured
+            </span>
+            <span class="rounded-full bg-white/10 ring-1 ring-white/20 backdrop-blur px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-[.14em] text-white">
+              Product
+            </span>
+          </div>
+
+          <!-- Bottom content -->
+          <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-8 lg:p-10">
+            <div class="flex items-center gap-3 text-[12.5px] font-bold text-white/60">
+              <span>12 Aug 2025</span>
+              <span class="w-1 h-1 rounded-full bg-white/40"></span>
+              <span>4 min read</span>
+            </div>
+
+            <h3 class="mt-4 font-display text-[24px] sm:text-[30px] lg:text-[34px] font-extrabold leading-[1.15] tracking-tight text-white max-w-2xl">
+              AlertGuard expands to three new counties ahead of the rainy season
+            </h3>
+
+            <p class="mt-4 text-[15px] leading-relaxed text-white/70 max-w-xl hidden sm:block">
+              How community monitors and geospatial data are cutting warning times from days to hours — and what comes next.
+            </p>
+
+            <span class="mt-6 inline-flex items-center gap-2 text-[14px] font-bold text-white group-hover:gap-3 transition-all">
+              Read the story
+              <span class="grid place-items-center w-7 h-7 rounded-full bg-white/15 group-hover:bg-gold group-hover:text-ink transition">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ============ SIDE ARTICLES ============ -->
+      <div class="lg:col-span-5 grid sm:grid-cols-2 lg:grid-cols-1 gap-6 lg:gap-7">
+
+        <!-- Side article 1 -->
+        <a href="#" class="reveal group flex flex-col rounded-4xl overflow-hidden ring-1 ring-ink/5 bg-white shadow-soft hover:shadow-glow hover:-translate-y-1.5 transition-all duration-500" style="transition-delay:.08s">
+          <div class="relative h-44 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80"
+              alt="Young people collaborating on digital skills"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+            <div class="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-900/20 to-transparent"></div>
+
+            <span class="absolute top-4 left-4 rounded-full bg-gold text-ink px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-[.14em]">
+              Community
+            </span>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-3 text-[12px] font-bold text-ink/40">
+              <span>28 Jul 2025</span>
+              <span class="w-1 h-1 rounded-full bg-ink/20"></span>
+              <span>3 min read</span>
+            </div>
+            <h3 class="mt-3 font-display text-[18px] font-bold leading-snug group-hover:text-brand-700 transition">
+              Betna crosses 1,500 young people connected to skills and work
+            </h3>
+            <p class="mt-2.5 text-[14px] leading-relaxed text-ink/55 hidden sm:block">
+              A look at what happens when skills, not geography, decide who gets the opportunity.
+            </p>
+          </div>
+        </a>
+
+        <!-- Side article 2 -->
+        <a href="#" class="reveal group flex flex-col rounded-4xl overflow-hidden ring-1 ring-ink/5 bg-white shadow-soft hover:shadow-glow hover:-translate-y-1.5 transition-all duration-500" style="transition-delay:.16s">
+          <div class="relative h-44 overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?auto=format&fit=crop&w=1200&q=80"
+              alt="Radio station broadcasting hazard information"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110" />
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-emerald-900/20 to-transparent"></div>
+
+            <span class="absolute top-4 left-4 rounded-full bg-white/95 text-emerald-800 px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-[.14em]">
+              Partnership
+            </span>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-3 text-[12px] font-bold text-ink/40">
+              <span>05 Jul 2025</span>
+              <span class="w-1 h-1 rounded-full bg-ink/20"></span>
+              <span>2 min read</span>
+            </div>
+            <h3 class="mt-3 font-display text-[18px] font-bold leading-snug group-hover:text-brand-700 transition">
+              New partnership to open up hazard data for local radio stations
+            </h3>
+            <p class="mt-2.5 text-[14px] leading-relaxed text-ink/55 hidden sm:block">
+              Open data means facts, not rumours, reach communities first.
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ================= STAY UPDATED CTA ================= -->
+    <div class="reveal mt-14">
+      <div class="relative overflow-hidden rounded-4xl bg-gradient-to-br from-ink via-brand-950 to-brand-900 text-white px-8 py-12 sm:px-12 sm:py-14 shadow-glow">
+
+        <!-- Decorations -->
+        <div class="absolute inset-0 grid-lines opacity-50" aria-hidden="true"></div>
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-brand-500/25 blur-3xl" aria-hidden="true"></div>
+        <div class="absolute -bottom-32 -right-16 w-96 h-96 rounded-full bg-gold/15 blur-3xl" aria-hidden="true"></div>
+
+        <div class="relative grid lg:grid-cols-12 gap-10 items-center">
+
+          <!-- Copy -->
+          <div class="lg:col-span-6">
+            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/15 backdrop-blur px-3.5 py-1.5 text-[11px] font-extrabold uppercase tracking-[.16em] text-gold">
+              <span class="relative flex w-2 h-2 text-gold">
+                <span class="absolute inset-0 rounded-full bg-gold animate-ping"></span>
+                <span class="relative w-2 h-2 rounded-full bg-gold"></span>
+              </span>
+              Stay updated
+            </span>
+            <h3 class="mt-5 font-display text-[28px] sm:text-[36px] font-extrabold leading-[1.1] tracking-tight">
+              Never miss a field story.
+            </h3>
+            <p class="mt-4 text-[16px] leading-relaxed text-white/70 max-w-lg">
+              Get the latest updates from our programs, pilots and partnerships —
+              delivered straight to your inbox, once a month.
+            </p>
+
+            <!-- Tiny trust row -->
+            <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12.5px] font-semibold text-white/50">
+              <span class="inline-flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                One email a month
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                No spam, ever
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                Unsubscribe anytime
+              </span>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="lg:col-span-6">
+            <form id="news-cta-form" class="space-y-3" novalidate>
+              <div class="flex flex-col sm:flex-row gap-3 p-2 rounded-3xl bg-white/5 ring-1 ring-white/10 backdrop-blur-sm focus-within:ring-gold/50 transition">
+                <div class="relative flex-1">
+                  <svg class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/35"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/>
+                  </svg>
+                  <label for="news-email" class="sr-only">Email address</label>
+                  <input id="news-email" type="email" required autocomplete="email" placeholder="you@example.com"
+                    class="w-full rounded-2xl bg-transparent pl-12 pr-4 py-4 text-[15px] text-white placeholder-white/35 focus:outline-none" />
+                </div>
+                <button type="submit"
+                  class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-ink px-6 py-4 text-[15px] font-bold hover:bg-gold transition-all duration-300 shrink-0">
+                  Subscribe
+                  <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                  </svg>
+                </button>
+              </div>
+
+              <p id="news-cta-msg" class="hidden text-[13.5px] font-semibold text-emerald-400"></p>
+            </form>
+
+            <div class="mt-5 flex items-center gap-4">
+              <a href="#" class="group inline-flex items-center gap-2 text-[14px] font-bold text-white/70 hover:text-white transition">
+                See all updates
+                <span class="grid place-items-center w-6 h-6 rounded-full bg-white/10 group-hover:bg-gold group-hover:text-ink transition">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                  </svg>
+                </span>
+              </a>
+              <span class="h-4 w-px bg-white/15"></span>
+              <a href="#" class="group inline-flex items-center gap-2 text-[14px] font-bold text-white/70 hover:text-white transition">
+                Read on LinkedIn
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21h-4V9Z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile "all news" link -->
+    <div class="mt-8 flex justify-center sm:hidden">
+      <a href="#" class="inline-flex items-center gap-2 rounded-2xl bg-ink/[.04] ring-1 ring-ink/5 px-5 py-3.5 text-[14.5px] font-bold text-ink">
+        All news
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  /* Newsletter CTA form handler (demo) */
+  (function () {
+    var f = document.getElementById('news-cta-form');
+    if (!f) return;
+    var msg = document.getElementById('news-cta-msg');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!f.checkValidity()) { f.reportValidity(); return; }
+      var btn = f.querySelector('button[type="submit"]');
+      var original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = 'Subscribing…';
+      // TODO: connect to your email service
+      setTimeout(function () {
+        msg.textContent = '✅ You’re subscribed. Welcome to the OSS community!';
+        msg.classList.remove('hidden');
+        f.reset();
+        btn.disabled = false;
+        btn.innerHTML = original;
+      }, 800);
+    });
+  })();
+</script>
+
+  <!-- ============================================================
+       GET INVOLVED / CTA
+  ============================================================ -->
+  <section id="get-involved" class="pb-20 lg:pb-28">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-4xl bg-brand-600 text-white px-8 py-14 lg:px-16 lg:py-20 shadow-glow">
+        <div class="absolute inset-0 grid-lines opacity-70" aria-hidden="true"></div>
+        <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-gold/20 blur-3xl" aria-hidden="true"></div>
+
+        <div class="relative grid lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7">
+            <h2 class="reveal font-display text-[30px] sm:text-[40px] font-extrabold leading-[1.12] tracking-tight">
+              There's a seat for you in this room.
+            </h2>
+            <p class="reveal mt-5 max-w-xl text-[16.5px] leading-relaxed text-white/75">
+              Whether you code, fund, teach, report or simply care — Open South Sudan is built
+              on people who show up. Choose how you want to help.
+            </p>
+          </div>
+
+          <div class="lg:col-span-5 grid sm:grid-cols-2 lg:grid-cols-1 gap-3">
+            <a href="#" class="reveal group flex items-center justify-between gap-4 rounded-2xl bg-white px-6 py-5 text-brand-700 font-bold hover:-translate-y-0.5 transition-all duration-300">
+              <span class="flex items-center gap-3">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21l7.7-7.6 1.1-1a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+                Donate
+              </span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#" class="reveal group flex items-center justify-between gap-4 rounded-2xl bg-white/10 ring-1 ring-white/25 backdrop-blur px-6 py-5 font-bold hover:bg-white/20 transition-all duration-300" style="transition-delay:.06s">
+              <span class="flex items-center gap-3">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Volunteer
+              </span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#contact" class="reveal group flex items-center justify-between gap-4 rounded-2xl bg-white/10 ring-1 ring-white/25 backdrop-blur px-6 py-5 font-bold hover:bg-white/20 transition-all duration-300" style="transition-delay:.12s">
+              <span class="flex items-center gap-3">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+                Partner with us
+              </span>
+              <svg class="w-4 h-4 group-hover:translate-x-1 transition" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer id="contact" class="relative bg-ink text-white/70 overflow-hidden">
+
+  <!-- Top accent line -->
+  <div class="h-1 w-full bg-gradient-to-r from-brand-700 via-gold to-brand-600" aria-hidden="true"></div>
+
+  <!-- Ambient glow -->
+  <div class="pointer-events-none absolute -top-48 left-1/2 -translate-x-1/2 w-[900px] h-[420px] rounded-full bg-brand-600/25 blur-[130px]" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute bottom-0 right-0 w-[500px] h-[300px] rounded-full bg-gold/10 blur-[120px]" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-7xl px-6 lg:px-8">
+
+    <!-- ================= NEWSLETTER STRIP ================= -->
+    <div class="pt-14 pb-12 border-b border-white/10">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+        <div class="lg:col-span-5">
+          <span class="inline-flex items-center gap-2 rounded-full bg-white/5 ring-1 ring-white/10 px-3.5 py-1.5 text-[11.5px] font-extrabold uppercase tracking-[.16em] text-gold">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16v16H4z"/><path d="m4 7 8 6 8-6"/>
+            </svg>
+            Newsletter
+          </span>
+          <h3 class="mt-4 font-display text-[26px] sm:text-[30px] font-extrabold text-white leading-tight tracking-tight">
+            Stay in the loop
+          </h3>
+          <p class="mt-3 text-[15px] leading-relaxed max-w-md">
+            Monthly updates on our programs, open data and opportunities across South Sudan. No spam — ever.
+          </p>
+        </div>
+
+        <div class="lg:col-span-7">
+          <form id="newsletter-form" class="w-full" novalidate>
+            <div class="flex flex-col sm:flex-row gap-3 p-2 rounded-3xl bg-white/5 ring-1 ring-white/10 backdrop-blur-sm focus-within:ring-gold/50 transition">
+
+              <div class="relative flex-1">
+                <svg class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/35"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/>
+                </svg>
+                <label for="nl-email" class="sr-only">Email address</label>
+                <input id="nl-email" type="email" required autocomplete="email" placeholder="you@example.com"
+                  class="w-full rounded-2xl bg-transparent pl-12 pr-4 py-4 text-[15px] text-white placeholder-white/35 focus:outline-none" />
+              </div>
+
+              <button type="submit"
+                class="group inline-flex items-center justify-center gap-2 rounded-2xl bg-white text-brand-700 px-7 py-4 text-[15px] font-bold hover:bg-gold hover:text-ink transition-all duration-300 shrink-0">
+                Subscribe
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+              </button>
+            </div>
+
+            <p id="newsletter-msg" class="hidden mt-3 items-center gap-2 text-[13.5px] font-semibold text-emerald-400"></p>
+            <p class="mt-3 text-[12.5px] text-white/35">
+              By subscribing you agree to our <a href="#" class="underline underline-offset-2 hover:text-white/70 transition">privacy policy</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MAIN FOOTER ================= -->
+    <div class="py-14 grid gap-12 lg:gap-8 lg:grid-cols-12">
+
+      <!-- Brand column -->
+      <div class="lg:col-span-4">
+        <a href="/" class="group inline-flex items-center gap-3">
+          <span class="grid place-items-center w-11 h-11 rounded-2xl bg-brand-600 text-white shadow-glow group-hover:scale-105 transition-transform duration-300">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M3.6 9h16.8M3.6 15h16.8"/>
+              <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18Z"/>
+            </svg>
+          </span>
+          <span class="leading-tight">
+            <span class="block font-display font-extrabold text-[17px] text-white tracking-tight">Open South Sudan</span>
+            <span class="block text-[11px] font-semibold uppercase tracking-[.16em] text-gold">Tech for good</span>
+          </span>
+        </a>
+
+        <p class="mt-6 text-[15px] leading-relaxed max-w-sm text-white/60">
+          A non-profit using technology, data and community-driven innovation to build a safer,
+          stronger South Sudan.
+        </p>
+
+        <!-- Contact list -->
+        <ul class="mt-7 space-y-4 text-[15px]">
+          <li class="flex items-start gap-3.5">
+            <span class="grid place-items-center w-9 h-9 rounded-xl bg-white/5 ring-1 ring-white/10 shrink-0">
+              <svg class="w-[18px] h-[18px] text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+            </span>
+            <span class="pt-1.5 leading-snug text-white/65">
+              Juba, Central Equatoria<br />South Sudan
+            </span>
+          </li>
+
+          <li class="flex items-center gap-3.5">
+            <span class="grid place-items-center w-9 h-9 rounded-xl bg-white/5 ring-1 ring-white/10 shrink-0">
+              <svg class="w-[18px] h-[18px] text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>
+              </svg>
+            </span>
+            <a href="tel:+211922702881" class="font-semibold text-white/70 hover:text-white transition">092 270 2881</a>
+          </li>
+
+          <li class="flex items-center gap-3.5">
+            <span class="grid place-items-center w-9 h-9 rounded-xl bg-white/5 ring-1 ring-white/10 shrink-0">
+              <svg class="w-[18px] h-[18px] text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/>
+              </svg>
+            </span>
+            <a href="mailto:hello@open-ss.org" class="font-semibold text-white/70 hover:text-white transition">hello@open-ss.org</a>
+          </li>
+        </ul>
+
+        <!-- Socials -->
+        <div class="mt-8">
+          <p class="text-[11.5px] font-extrabold uppercase tracking-[.16em] text-white/35">Follow us</p>
+          <div class="mt-4 flex items-center gap-2.5">
+            <a href="#" aria-label="LinkedIn"
+               class="grid place-items-center w-11 h-11 rounded-2xl bg-white/5 ring-1 ring-white/10 text-white/70 hover:bg-brand-600 hover:ring-brand-600 hover:text-white hover:-translate-y-0.5 transition-all duration-300">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.6c0-1.34-.03-3.07-1.9-3.07-1.9 0-2.2 1.46-2.2 2.97V21h-4V9Z"/>
+              </svg>
+            </a>
+
+            <a href="#" aria-label="GitHub"
+               class="grid place-items-center w-11 h-11 rounded-2xl bg-white/5 ring-1 ring-white/10 text-white/70 hover:bg-brand-600 hover:ring-brand-600 hover:text-white hover:-translate-y-0.5 transition-all duration-300">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/>
+              </svg>
+            </a>
+
+            <a href="#" aria-label="Facebook"
+               class="grid place-items-center w-11 h-11 rounded-2xl bg-white/5 ring-1 ring-white/10 text-white/70 hover:bg-brand-600 hover:ring-brand-600 hover:text-white hover:-translate-y-0.5 transition-all duration-300">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99A10 10 0 0 0 22 12Z"/>
+              </svg>
+            </a>
+
+            <a href="#" aria-label="X (Twitter)"
+               class="grid place-items-center w-11 h-11 rounded-2xl bg-white/5 ring-1 ring-white/10 text-white/70 hover:bg-brand-600 hover:ring-brand-600 hover:text-white hover:-translate-y-0.5 transition-all duration-300">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.9 2H22l-7.1 8.1L23 22h-6.6l-5.2-6.8L5.3 22H2.2l7.6-8.7L1.6 2h6.7l4.7 6.2L18.9 2Zm-1.1 18h1.8L7.3 3.8H5.4L17.8 20Z"/>
+              </svg>
+            </a>
+
+            <a href="#" aria-label="YouTube"
+               class="grid place-items-center w-11 h-11 rounded-2xl bg-white/5 ring-1 ring-white/10 text-white/70 hover:bg-brand-600 hover:ring-brand-600 hover:text-white hover:-translate-y-0.5 transition-all duration-300">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23 12s0-3.9-.5-5.7a3 3 0 0 0-2.1-2.1C18.6 3.7 12 3.7 12 3.7s-6.6 0-8.4.5A3 3 0 0 0 1.5 6.3C1 8.1 1 12 1 12s0 3.9.5 5.7a3 3 0 0 0 2.1 2.1c1.8.5 8.4.5 8.4.5s6.6 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.9 23 12 23 12ZM9.8 15.5v-7l6.2 3.5-6.2 3.5Z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spacer on large -->
+      <div class="hidden lg:block lg:col-span-1"></div>
+
+      <!-- About links -->
+      <div class="lg:col-span-1">
+        <h4 class="font-display text-[12.5px] font-extrabold uppercase tracking-[.16em] text-white">About</h4>
+        <ul class="mt-5 space-y-3.5 text-[14.5px]">
+          <li><a href="#about" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Who We Are</a></li>
+          <li><a href="#about" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Mission &amp; Values</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Our Team</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Partners</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Careers</a></li>
+        </ul>
+      </div>
+
+      <!-- Programs -->
+      <div class="lg:col-span-2">
+        <h4 class="font-display text-[12.5px] font-extrabold uppercase tracking-[.16em] text-white">Programs</h4>
+        <ul class="mt-5 space-y-3.5 text-[14.5px]">
+          <li><a href="#programs" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">AlertGuard</a></li>
+          <li><a href="#programs" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Betna</a></li>
+          <li><a href="#programs" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Eventy</a></li>
+          <li><a href="#programs" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Peacebuilding</a></li>
+          <li><a href="#programs" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Digital Inclusion</a></li>
+        </ul>
+      </div>
+
+      <!-- Get involved -->
+      <div class="lg:col-span-2">
+        <h4 class="font-display text-[12.5px] font-extrabold uppercase tracking-[.16em] text-white">Get Involved</h4>
+        <ul class="mt-5 space-y-3.5 text-[14.5px]">
+          <li>
+            <a href="#get-involved" class="inline-flex items-center gap-2 font-semibold text-gold hover:text-white transition-colors duration-200">
+              Donate
+              <span class="grid place-items-center w-4 h-4 rounded-full bg-gold/20">
+                <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+          </li>
+          <li><a href="#get-involved" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Volunteer</a></li>
+          <li><a href="#get-involved" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Partner With Us</a></li>
+          <li><a href="#alerts" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Get Alerts</a></li>
+          <li><a href="#alerts" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Report a Hazard</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="lg:col-span-2">
+        <h4 class="font-display text-[12.5px] font-extrabold uppercase tracking-[.16em] text-white">Resources</h4>
+        <ul class="mt-5 space-y-3.5 text-[14.5px]">
+          <li><a href="#news" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">News &amp; Blog</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Reports</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">Media Centre</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">FAQs</a></li>
+          <li><a href="#" class="inline-block text-white/60 hover:text-white hover:translate-x-0.5 transition-all duration-200">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ================= BOTTOM BAR ================= -->
+    <div class="py-7 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-5 text-[13.5px]">
+      <p class="text-white/45 text-center sm:text-left">
+        © <span id="year">2025</span> Open South Sudan. All rights reserved.
+      </p>
+
+      <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <li><a href="#" class="text-white/45 hover:text-white transition">Privacy Policy</a></li>
+        <li><a href="#" class="text-white/45 hover:text-white transition">Terms of Use</a></li>
+        <li><a href="#" class="text-white/45 hover:text-white transition">Safeguarding</a></li>
+        <li><a href="#" class="text-white/45 hover:text-white transition">Accessibility</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     FLOATING ACTIONS
+============================================================ -->
+
+<!-- Floating call button (mobile only) -->
+<a href="tel:+211922702881"
+   class="sm:hidden fixed bottom-5 left-5 z-40 grid place-items-center w-14 h-14 rounded-2xl bg-brand-600 text-white shadow-glow active:scale-95 hover:bg-brand-700 transition"
+   aria-label="Call Open South Sudan">
+  <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/>
+  </svg>
+</a>
+
+<!-- Back to top -->
+<button id="to-top"
+  class="fixed bottom-5 right-5 z-40 grid place-items-center w-14 h-14 rounded-2xl bg-white text-ink ring-1 ring-ink/10 shadow-soft opacity-0 translate-y-3 pointer-events-none transition-all duration-300 hover:bg-brand-600 hover:text-white hover:ring-brand-600"
+  aria-label="Back to top">
+  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Current year ---------- */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- Mobile menu ---------- */
+  var menuBtn  = document.getElementById('menu-btn');
+  var menu     = document.getElementById('mobile-menu');
+  var iconOpen = document.getElementById('icon-open');
+  var iconClose= document.getElementById('icon-close');
+
+  function setMenu(open) {
+    menu.classList.toggle('hidden', !open);
+    iconOpen.classList.toggle('hidden', open);
+    iconClose.classList.toggle('hidden', !open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+
+  menuBtn.addEventListener('click', function () {
+    setMenu(menu.classList.contains('hidden'));
+  });
+
+  // Close menu when a link inside is clicked
+  menu.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { setMenu(false); });
+  });
+
+  // Close on resize to desktop
+  window.addEventListener('resize', function () {
+    if (window.innerWidth >= 1024) setMenu(false);
+  });
+
+  /* ---------- Header shadow on scroll ---------- */
+  var header = document.getElementById('site-header');
+  function onScrollHeader() {
+    if (window.scrollY > 8) header.classList.add('shadow-soft');
+    else header.classList.remove('shadow-soft');
+  }
+  window.addEventListener('scroll', onScrollHeader, { passive: true });
+  onScrollHeader();
+
+  /* ---------- Scroll reveal ---------- */
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = document.querySelectorAll('.reveal');
+
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealEls.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  }
+
+  /* ---------- Animated counters ---------- */
+  var counters = document.querySelectorAll('.counter');
+
+  function animateCounter(el) {
+    var target   = parseFloat(el.getAttribute('data-count')) || 0;
+    var suffix   = el.getAttribute('data-suffix') || '';
+    var duration = 1600;
+    var start    = null;
+
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      // easeOutExpo
+      var eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      var value = Math.floor(eased * target);
+      el.textContent = value.toLocaleString('en-US') + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString('en-US') + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    counters.forEach(function (el) {
+      el.textContent = (parseFloat(el.getAttribute('data-count')) || 0).toLocaleString('en-US')
+        + (el.getAttribute('data-suffix') || '');
+    });
+  } else {
+    var counterObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (el) { counterObserver.observe(el); });
+  }
+
+  /* ---------- Back to top ---------- */
+  var toTop = document.getElementById('to-top');
+  window.addEventListener('scroll', function () {
+    var show = window.scrollY > 700;
+    toTop.classList.toggle('opacity-0', !show);
+    toTop.classList.toggle('translate-y-3', !show);
+    toTop.classList.toggle('pointer-events-none', !show);
+  }, { passive: true });
+
+  toTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+
+  /* ---------- Alerts form (demo handler — wire to your backend) ---------- */
+  var alertsForm = document.getElementById('alerts-form');
+  var alertsMsg  = document.getElementById('alerts-msg');
+
+  alertsForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (!alertsForm.checkValidity()) {
+      alertsForm.reportValidity();
+      return;
+    }
+
+    var btn = alertsForm.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Signing you up…';
+
+    // TODO: replace with a real POST to your API / SMS gateway
+    setTimeout(function () {
+      alertsMsg.textContent = '✅ You’re signed up. You’ll receive alerts for your area by SMS.';
+      alertsMsg.classList.remove('hidden');
+      alertsForm.reset();
+      btn.disabled = false;
+      btn.textContent = 'Get alerts';
+    }, 800);
+  });
+
+  /* ---------- Newsletter form (demo handler) ---------- */
+  var nlForm = document.getElementById('newsletter-form');
+  var nlMsg  = document.getElementById('newsletter-msg');
+
+  nlForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!nlForm.checkValidity()) { nlForm.reportValidity(); return; }
+
+    // TODO: connect to Mailchimp / Brevo / your own list
+    nlMsg.textContent = 'Subscribed ✓';
+    nlMsg.classList.remove('hidden');
+    nlForm.reset();
+  });
+
+  /* ---------- Smooth anchor scrolling with sticky-header offset ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var id = link.getAttribute('href');
+      if (id === '#' || id.length < 2) return;
+      var target = document.querySelector(id);
+      if (!target) return;
+
+      e.preventDefault();
+      var offset = header.offsetHeight + 12;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+      window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      history.replaceState(null, '', id);
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
